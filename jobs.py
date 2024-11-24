@@ -278,11 +278,11 @@ class JobScanner:
 
             # self._run_www_check_for_the_needed_jobs(www, JOB_ROLES, company_data)
 
-            if not int(line_number) % 4:
+            if not int(line_number) % 12:
                 for p in running_processes:
                     p.join()
                 else:
-                    self.logger.info(f"Finished all processes-based tasks in the iteration [line:{line_number}].")
+                    self.logger.info(f"Finished all 12-processes-based tasks iteration [line:{line_number}].")
                     running_processes.clear()
 
 
