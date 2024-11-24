@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import multiprocessing
 import threading
 from os.path import dirname
 from typing import Optional
@@ -189,7 +190,30 @@ class JobScanner:
 
         return False
 
-    def run(self, start_line_number: int = 0) -> None:
+    def run_synchronously(self, start_line_number: int = 0) -> None:
+        """Runs job search.
+
+        Args:
+            start_line_number: number of line in file db to start processing
+
+        Returns:
+            None, but save job directly to output file
+        """
+        for company_data in iterate_over_csv_db_file():
+            line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address = company_data
+
+            if start_line_number and start_line_number > int(line_number):
+                continue
+
+            if www == "brak_www":
+                continue
+
+            self._run_www_check_for_the_needed_jobs(www, JOB_ROLES, company_data)
+
+            if not int(line_number) % 11:
+                self.logger.info(f"Finished all 11-like iteration [line:{line_number}].")
+
+    def run_with_threading(self, start_line_number: int = 0) -> None:
         """Runs job search.
 
         Args:
@@ -225,7 +249,7 @@ class JobScanner:
                     self.logger.info(f"Finished all thread tasks in the iteration [line:{line_number}].")
                     running_threads.clear()
 
-    def run_synchronously(self, start_line_number: int = 0) -> None:
+    def run_with_multiprocessing(self, start_line_number: int = 0) -> None:
         """Runs job search.
 
         Args:
@@ -234,6 +258,8 @@ class JobScanner:
         Returns:
             None, but save job directly to output file
         """
+        running_processes = []
+
         for company_data in iterate_over_csv_db_file():
             line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address = company_data
 
@@ -243,12 +269,23 @@ class JobScanner:
             if www == "brak_www":
                 continue
 
-            self._run_www_check_for_the_needed_jobs(www, JOB_ROLES, company_data)
+            process = multiprocessing.Process(
+                target=self._run_www_check_for_the_needed_jobs, args=(www, JOB_ROLES, company_data)
+            )
 
-            if not int(line_number) % 11:
-                self.logger.info(f"Finished all 11-like iteration [line:{line_number}].")
+            process.start()
+            running_processes.append(process)
+
+            # self._run_www_check_for_the_needed_jobs(www, JOB_ROLES, company_data)
+
+            if not int(line_number) % 4:
+                for p in running_processes:
+                    p.join()
+                else:
+                    self.logger.info(f"Finished all processes-based tasks in the iteration [line:{line_number}].")
+                    running_processes.clear()
 
 
 if __name__ == "__main__":
     scanner = JobScanner()
-    scanner.run_synchronously()
+    scanner.run_with_multiprocessing()
