@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import threading
 from os.path import dirname
 from typing import Optional
 from urllib.parse import urljoin
@@ -155,6 +156,7 @@ class JobScanner:
             List with career links. In case of issues empty list is returned.
         """
         line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address = company_data
+        self.logger.info(f"Processing line number: {line_number}, {company_name}")
 
         career_links = [www] + list(set(self._get_career_related_links(www)))
         for link in career_links:
@@ -196,6 +198,8 @@ class JobScanner:
         Returns:
             None, but save job directly to output file
         """
+        running_threads = []
+
         for company_data in iterate_over_csv_db_file():
             line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address = company_data
 
@@ -205,5 +209,23 @@ class JobScanner:
             if www == "brak_www":
                 continue
 
-            self.logger.info(f"Processing line number: {line_number}, {company_name}")
-            self._run_www_check_for_the_needed_jobs(www, JOB_ROLES, company_data)
+            thread = threading.Thread(
+                target=self._run_www_check_for_the_needed_jobs, args=(www, JOB_ROLES, company_data)
+            )
+
+            thread.start()
+            running_threads.append(thread)
+
+            # self._run_www_check_for_the_needed_jobs(www, JOB_ROLES, company_data)
+
+            if not int(line_number) % 11:
+                for t in running_threads:
+                    t.join()
+                else:
+                    self.logger.info(f"Finished all thread tasks in the iteration [line:{line_number}].")
+                    running_threads.clear()
+
+
+if __name__ == "__main__":
+    scanner = JobScanner()
+    scanner.run()
