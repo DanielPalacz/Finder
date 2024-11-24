@@ -225,7 +225,30 @@ class JobScanner:
                     self.logger.info(f"Finished all thread tasks in the iteration [line:{line_number}].")
                     running_threads.clear()
 
+    def run_synchronously(self, start_line_number: int = 0) -> None:
+        """Runs job search.
+
+        Args:
+            start_line_number: number of line in file db to start processing
+
+        Returns:
+            None, but save job directly to output file
+        """
+        for company_data in iterate_over_csv_db_file():
+            line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address = company_data
+
+            if start_line_number and start_line_number > int(line_number):
+                continue
+
+            if www == "brak_www":
+                continue
+
+            self._run_www_check_for_the_needed_jobs(www, JOB_ROLES, company_data)
+
+            if not int(line_number) % 11:
+                self.logger.info(f"Finished all 11-like iteration [line:{line_number}].")
+
 
 if __name__ == "__main__":
     scanner = JobScanner()
-    scanner.run()
+    scanner.run_synchronously()
