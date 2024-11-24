@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import multiprocessing
 import threading
 from os.path import dirname
@@ -167,6 +168,29 @@ class JobScanner:
                     self.logger.info(f"Found potential job, so breaking loop iteration [{company_name}, {link}].")
                 break
 
+    async def _run_www_check_for_the_needed_jobs_async(
+        self, www, job_phrases: list[str], company_data: list[str]
+    ) -> None:
+        """Runs www check for the needed job search.
+
+        Args:
+            www: url to be checked for the searched jobs
+            job_phrases: url to be checked for the searched jobs
+
+        Returns:
+            List with career links. In case of issues empty list is returned.
+        """
+        line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address = company_data
+        self.logger.info(f"Processing line number: {line_number}, {company_name}")
+
+        career_links = [www] + list(set(self._get_career_related_links(www)))
+        for link in career_links:
+            if self.may_company_have_the_needed_jobs(link, job_phrases):
+                with open(CRAWLED_JOBS_OUTPUT_FILE, "a+") as jobs_file:
+                    jobs_file.write(f"{company_name};{krs_number};{email};{www};{voivodeship};{address};{link}\n")
+                    self.logger.info(f"Found potential job, so breaking loop iteration [{company_name}, {link}].")
+                break
+
     def may_company_have_the_needed_jobs(self, url, job_phrases: list) -> bool:
         """Checks if the given link www may contain jobs that are searched.
 
@@ -212,6 +236,38 @@ class JobScanner:
 
             if not int(line_number) % 11:
                 self.logger.info(f"Finished all 11-like iteration [line:{line_number}].")
+
+    async def run_with_asyncio(self, start_line_number: int = 0) -> None:
+        """Runs job search.
+
+        Args:
+            start_line_number: number of line in file db to start processing
+
+        Returns:
+            None, but save job directly to output file
+        """
+        asyncio_tasks = []
+
+        for company_data in iterate_over_csv_db_file():
+            line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address = company_data
+
+            if start_line_number and start_line_number > int(line_number):
+                continue
+
+            if www == "brak_www":
+                continue
+
+            task = asyncio.create_task(self._run_www_check_for_the_needed_jobs_async(www, JOB_ROLES, company_data))
+            asyncio_tasks.append(task)
+
+            # self._run_www_check_for_the_needed_jobs(www, JOB_ROLES, company_data)
+
+            if not int(line_number) % 11:
+                for t in asyncio_tasks:
+                    await t
+                else:
+                    self.logger.info(f"Finished all asyncio tasks in the 11-based-iteration [line:{line_number}].")
+                    asyncio_tasks.clear()
 
     def run_with_threading(self, start_line_number: int = 0) -> None:
         """Runs job search.
@@ -288,4 +344,4 @@ class JobScanner:
 
 if __name__ == "__main__":
     scanner = JobScanner()
-    scanner.run_with_multiprocessing()
+    asyncio.run(scanner.run_with_asyncio())
