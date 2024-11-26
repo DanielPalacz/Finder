@@ -167,8 +167,9 @@ class JobScanner:
         if response_url is None:
             return []
         links = self._extract_links(response_url.url, response_url.text)
-        potential_career_links = self._filter_potential_career_related_links(links, url)
-        return potential_career_links
+        # potential_career_links = self._filter_potential_career_related_links(links, url)
+        # return potential_career_links
+        return links
 
     def _run_www_check_for_the_needed_jobs(self, www, job_phrases: list[str], company_data: list[str]) -> None:
         """Runs www check for the needed job search.
