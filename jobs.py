@@ -14,7 +14,7 @@ from helpers import iterate_over_csv_db_file
 
 
 CRAWLED_JOBS_OUTPUT_FILE = dirname(__file__) + "/CRAWLED_JOBS_OUTPUT_FILE.csv"
-JOB_ROLES = ["junior python"]
+JOB_ROLES = ["python engineer", "python software engineer"]
 
 
 class JobScanner:
@@ -24,6 +24,7 @@ class JobScanner:
         "career",
         "careers",
         "jobs",
+        "job",
         "work-with-us",
         "join-us",
         "recruitment",
