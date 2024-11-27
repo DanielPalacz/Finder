@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import asyncio
+import ssl
 from os.path import dirname
 from typing import Optional
 from urllib.parse import urljoin
 
 import aiohttp
-import requests
 from bs4 import BeautifulSoup
 
 from helpers import configure_logger
@@ -72,23 +72,33 @@ class JobScanner:
 
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(url, timeout=5) as response:
+                async with session.get(url, allow_redirects=True, timeout=5) as response:
                     # response = requests.get(url, allow_redirects=True, timeout=5)
                     if response.ok:
                         self.logger.debug(f"Successfully fetched the given url: {url}")
                         return await response.text()
-                    else:
-                        self.logger.error(
-                            f"Returning None, because something went wrong with request execution ({url}). "
-                            f"Returned status code: {response.status}"
-                        )
-                        return None
 
-        except requests.RequestException as e:
-            self.logger.error(
-                f"Returning None, because something went wrong with request execution ({url}). Details: {e}"
-            )
-            return None
+                    self.logger.error(
+                        f"Returning None, because something went wrong with request execution ({url}). "
+                        f"Returned status code: {response.status}"
+                    )
+                    return None
+
+        except ssl.SSLCertVerificationError:
+            if url.startswith("https://"):
+                url = url.replace("https://", "http://")
+
+            async with aiohttp.ClientSession() as session_backup:
+                async with session_backup.get(url, allow_redirects=True, timeout=5) as response_backup:
+                    if response_backup.ok:
+                        self.logger.debug(f"Successfully fetched the given url: {url}")
+                        return await response_backup.text()
+
+                    self.logger.error(
+                        f"Returning None, because something went wrong with request execution ({url}). "
+                        f"Returned status code: {response_backup.status}"
+                    )
+                    return None
 
         except Exception as e:
             self.logger.error(
@@ -113,7 +123,7 @@ class JobScanner:
         links_results = [urljoin(baseurl, link) for link in hrefs]
         return links_results
 
-    def _filter_potential_career_related_links(self, links: list, baseurl: str) -> list:
+    async def _filter_potential_career_related_links(self, links: list, baseurl: str) -> list:
         """Filters for potential career related links from list of the links.
 
         Args:
@@ -145,7 +155,7 @@ class JobScanner:
         if response_text is None:
             return []
         links = await self._extract_links(url, response_text)
-        potential_career_links = self._filter_potential_career_related_links(links, url)
+        potential_career_links = await self._filter_potential_career_related_links(links, url)
         return potential_career_links
 
     async def _run_www_check_for_the_needed_jobs_async(
@@ -158,7 +168,7 @@ class JobScanner:
             job_phrases: url to be checked for the searched jobs
 
         Returns:
-            List with career links. In case of issues empty list is returned.
+            None
         """
         line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address = company_data
         self.logger.info(f"Processing line number: {line_number}, {company_name}")
@@ -188,6 +198,7 @@ class JobScanner:
 
         if response_text is None:
             return False
+
         website_text = repr(response_text.lower())
         for job_role in job_phrases:
             job_role = job_role.lower()
@@ -216,6 +227,7 @@ class JobScanner:
             if www == "brak_www":
                 continue
 
+            # Creates task and store this in list:
             task = asyncio.create_task(self._run_www_check_for_the_needed_jobs_async(www, JOB_ROLES, company_data))
             asyncio_tasks.append(task)
 
@@ -231,4 +243,5 @@ class JobScanner:
 
 if __name__ == "__main__":
     scanner = JobScanner()
+    # Creating Even loop and starting scanner.run_with_asyncio async function:
     asyncio.run(scanner.run_with_asyncio())
