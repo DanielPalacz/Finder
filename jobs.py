@@ -83,6 +83,29 @@ class JobScanner:
                 )
                 return None
 
+        except requests.exceptions.SSLError:
+            if url.startswith("https://"):
+                url = url.replace("https://", "http://")
+
+            try:
+                response_http = requests.get(url, allow_redirects=True, timeout=5)
+                if response_http.ok:
+                    self.logger.debug(f"Successfully fetched the given url: {url} (backup http flow).")
+                    return response_http
+                else:
+                    self.logger.error(
+                        f"Returning None, because something went wrong with request execution ({url}). "
+                        f"Returned status code: {response_http.status_code}. Backup http flow."
+                    )
+                    return None
+
+            except Exception as e:
+                self.logger.error(
+                    f"Returning None, because something went wrong with request execution ({url}). "
+                    f"Details: {e}. Backup http flow."
+                )
+                return None
+
         except requests.RequestException as e:
             self.logger.error(
                 f"Returning None, because something went wrong with request execution ({url}). Details: {e}"
