@@ -57,10 +57,17 @@ Requests-HTML:
 
 #### So, then what next?
 ```
- - the solution will be multiprocessing-based, but I learn temporarily asyncio now as I want to invest some time for this and it demending a bit more effort. Hovever asyncio solution get well and it is on the branch.
+ - the solution will be multiprocessing-based,
  - time to play with PostgreSQL (this and next week)
  - extending company website database (till eoy)
  - checking if carrer links filter exclude some valid search accross Poland (26-30/11)
  - trying to limit impact of dynamic JS-based content by using Requests-HTML and evaulating cost
  - robots.txt add to solution relying on website's robots.txt rules
+ - starting to unt-tests (pytest)
+ ```
+
+#### Running tests:
+```
+ - PYTHONPATH=. pytest -s -vv tests/
+ - PYTHONPATH=. pytest -s -vv --html=report.html --self-contained-html
  ```

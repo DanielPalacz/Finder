@@ -33,7 +33,7 @@ repos:
   - id: bandit
     name: bandit
     entry: bandit
-    args: ["-r", ".", "--exclude", "./venv/"]
+    args: ["-r", ".", "--exclude", "./venv/,./tests/*test*.py"]
     language: python
     types: [python]
     pass_filenames: false
