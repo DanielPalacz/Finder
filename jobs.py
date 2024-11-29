@@ -261,8 +261,6 @@ class JobScanner:
             thread.start()
             running_threads.append(thread)
 
-            # self._run_www_check_for_the_needed_jobs(www, JOB_ROLES, company_data)
-
             if not int(line_number) % 11:
                 for t in running_threads:
                     t.join()
@@ -270,7 +268,7 @@ class JobScanner:
                     self.logger.info(f"Finished all thread tasks in the iteration [line:{line_number}].")
                     running_threads.clear()
 
-    def run_with_multiprocessing(self, start_line_number: int = 0) -> None:
+    def run(self, start_line_number: int = 0) -> None:
         """Runs job search.
 
         Args:
@@ -297,8 +295,6 @@ class JobScanner:
             process.start()
             running_processes.append(process)
 
-            # self._run_www_check_for_the_needed_jobs(www, JOB_ROLES, company_data)
-
             if not int(line_number) % 12:
                 for p in running_processes:
                     p.join()
@@ -309,4 +305,4 @@ class JobScanner:
 
 if __name__ == "__main__":
     scanner = JobScanner()
-    scanner.run_with_multiprocessing()
+    scanner.run()
