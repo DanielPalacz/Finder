@@ -31,6 +31,10 @@ def test_iterate_over_csv_db_file(mock_db_filepath):
     for company_data in iterate_over_csv_db_file(mock_db_filepath):
         line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address = company_data
 
+        print()
+        print()
+        print(company_data)
+        print()
         assert line_number == "1"
         assert company_name == '"FIRMA 1" SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ'
         assert krs_number == "101"

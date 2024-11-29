@@ -87,19 +87,19 @@ class JobScanner:
             try:
                 response_http = requests.get(url, allow_redirects=True, timeout=5)
                 if response_http.ok:
-                    self.logger.debug(f"Successfully fetched the given url: {url} (backup http flow).")
+                    self.logger.debug(f"Successfully fetched the given url: {url} [(]backup http flow]")
                     return response_http
                 else:
                     self.logger.error(
                         f"Returning None, because something went wrong with request execution ({url}). "
-                        f"Returned status code: {response_http.status_code}. Backup http flow."
+                        f"Returned status code: {response_http.status_code} [backup http flow]"
                     )
                     return None
 
             except Exception as e:
                 self.logger.error(
                     f"Returning None, because something went wrong with request execution ({url}). "
-                    f"Details: {e}. Backup http flow."
+                    f"Details: {e!r} [backup http flow]"
                 )
                 return None
 
