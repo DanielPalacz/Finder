@@ -4,7 +4,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 from os import getenv
 
-DB_FILENAME = "USED_FILE_DB.csv"
+from config import DB_FILEPATH
 
 
 def configure_logger(logger_name: str) -> logging.Logger:
@@ -39,7 +39,7 @@ def configure_logger(logger_name: str) -> logging.Logger:
     return logger
 
 
-def iterate_over_csv_db_file():
+def iterate_over_csv_db_file(db_filepath: str = DB_FILEPATH):
     """Iterates line-after-line over content of DB file
 
     Uses DB with default file name: DB_FILENAME
@@ -48,7 +48,7 @@ def iterate_over_csv_db_file():
         list: line content split to list as following:
               [line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address]
     """
-    with open(DB_FILENAME, "r") as companies_file:
+    with open(db_filepath, "r") as companies_file:
         for line in companies_file:
 
             split_line = line.replace("\n", "").split(";")

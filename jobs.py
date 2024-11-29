@@ -2,19 +2,16 @@ from __future__ import annotations
 
 import multiprocessing
 import threading
-from os.path import dirname
 from typing import Optional
 from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
 
+from config import CRAWLED_JOBS_OUTPUT_FILE
+from config import JOB_ROLES
 from helpers import configure_logger
 from helpers import iterate_over_csv_db_file
-
-
-CRAWLED_JOBS_OUTPUT_FILE = dirname(__file__) + "/CRAWLED_JOBS_OUTPUT_FILE.csv"
-JOB_ROLES = ["python"]
 
 
 class JobScanner:
