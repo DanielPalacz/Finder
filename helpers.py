@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from logging.handlers import RotatingFileHandler
 from os import getenv
+from typing import Optional
 
 from config import DB_FILEPATH
 
@@ -39,7 +40,7 @@ def configure_logger(logger_name: str) -> logging.Logger:
     return logger
 
 
-def iterate_over_csv_db_file(db_filepath: str = DB_FILEPATH):
+def iterate_over_csv_db_file(db_filepath: Optional[str] = None):
     """Iterates line-after-line over content of DB file
 
     Uses DB with default file name: DB_FILENAME
@@ -48,9 +49,11 @@ def iterate_over_csv_db_file(db_filepath: str = DB_FILEPATH):
         list: line content split to list as following:
               [line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address]
     """
+    if db_filepath is None:
+        db_filepath = DB_FILEPATH
+
     with open(db_filepath, "r") as companies_file:
         for line in companies_file:
-
             split_line = line.replace("\n", "").split(";")
             # line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address = split_line
             yield split_line
