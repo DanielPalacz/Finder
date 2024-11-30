@@ -7,6 +7,7 @@ from urllib.parse import urljoin
 
 import requests
 from bs4 import BeautifulSoup
+from requests_html import HTMLSession
 
 from config import CRAWLED_JOBS_OUTPUT_FILE
 from config import JOB_ROLES
@@ -69,7 +70,10 @@ class JobScanner:
         self.logger.info(f"Fetching the given url: {url}")
 
         try:
-            response = requests.get(url, allow_redirects=True, timeout=5)
+            # response = requests.get(url, allow_redirects=True, timeout=5)
+            session = HTMLSession()
+            response = session.get(url, allow_redirects=True, timeout=5)
+            response.html.render(timeout=10, sleep=2)  # Renders JavaScript
             if response.ok:
                 self.logger.debug(f"Successfully fetched the given url: {url}")
                 return response
@@ -85,9 +89,11 @@ class JobScanner:
                 url = url.replace("https://", "http://")
 
             try:
-                response_http = requests.get(url, allow_redirects=True, timeout=5)
+                # response = requests.get(url, allow_redirects=True, timeout=5)
+                session = HTMLSession()
+                response_http = session.get(url, allow_redirects=True, timeout=5)
                 if response_http.ok:
-                    self.logger.debug(f"Successfully fetched the given url: {url} [(]backup http flow]")
+                    self.logger.debug(f"Successfully fetched the given url: {url} [backup http flow]")
                     return response_http
                 else:
                     self.logger.error(
