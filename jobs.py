@@ -180,7 +180,7 @@ class JobScanner:
         line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address = company_data
         self.logger.info(f"Processing line number: {line_number}, {company_name}")
 
-        career_links = [www] + list(set(self._get_career_related_links(www)))
+        career_links = list(set(self._get_career_related_links(www)))
         for link in career_links:
             if self.may_company_have_the_needed_jobs(link, job_phrases):
                 with open(CRAWLED_JOBS_OUTPUT_FILE, "a+") as jobs_file:
