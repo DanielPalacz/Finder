@@ -29,3 +29,6 @@ The nature of the tasks is hybrid slightly CPU-bound, but more IO-bound.
 ```
 ##### I thought about celery infrastructure, but for this project it will not be beneficial.
  - I want the fastest solution to run search during the night and simply dont have setup to have gains from celery.
+
+
+### The solution will be multiprocessing-based.
