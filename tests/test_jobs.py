@@ -44,7 +44,7 @@ def test_job_scanner_run_www_check_for_the_needed_jobs(
         assert result_content == (
             '"FIRMA 1" SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ;101;brak_email;'
             "http://127.0.0.1:9999/;małopolskie;Borsucza,16,Kraków,30-40-408,Kraków,Polska;"
-            "http://127.0.0.1:9999/\n"
+            "http://127.0.0.1:9999/#careers\n"
         )
 
 
@@ -63,7 +63,7 @@ def test_job_scanner_run(monkeypatch, mock_db_filepath, setup_www_page, removes_
         assert result_content == (
             '"FIRMA 1" SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ;101;brak_email;'
             "http://127.0.0.1:9999/;małopolskie;Borsucza,16,Kraków,30-40-408,Kraków,Polska;"
-            "http://127.0.0.1:9999/\n"
+            "http://127.0.0.1:9999/#careers\n"
         )
 
 
