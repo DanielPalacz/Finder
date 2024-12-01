@@ -8,14 +8,15 @@
 
 #### So, then what next?
 
-| Item                                                                             | Status         |
-|----------------------------------------------------------------------------------|----------------|
-| Which multitasking solution?                                                     | [DONE]         |
-| playing with PostgreSQL                                                          | [NOT STARTED]  |
-| checking impact of career links filtering                                        | [IN PROGRESS]  |
-| limiting impact of dynamic JS content by using requests-html and evaulating cost | [DONE]         |
-| robots.txt add to solution relying on website's robots.txt rules                 | [NOT STARTED]  |
-| unit-testing (pytest)                                                            | [IN PROGRESS]  |
+| Item                                                                             | Status        |
+|----------------------------------------------------------------------------------|---------------|
+| Which multitasking solution?                                                     | [DONE]        |
+| playing with PostgreSQL                                                          | [NOT STARTED] |
+| checking impact of career links filtering                                        | [PAUSED]      |
+| limiting impact of dynamic JS content by using requests-html and evaulating cost | [DONE]        |
+| robots.txt add to solution relying on website's robots.txt rules                 | [NOT STARTED] |
+| unit-testing (pytest)                                                            | [DONE]        |
+| dockerize solution                                                               | [NOT STARTED] |
 
 
 
