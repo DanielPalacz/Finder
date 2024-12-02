@@ -4,11 +4,15 @@ import logging
 from logging.handlers import RotatingFileHandler
 from os import getenv
 from typing import Optional
+from typing import TypeAlias
 
 from config import DB_FILEPATH
 
 
-def configure_logger(logger_name: str) -> logging.Logger:
+LoggerT: TypeAlias = logging.Logger
+
+
+def configure_logger(logger_name: str) -> LoggerT:
     """Configures logger.
 
     Uses env variable LOG_LEVEL_NAME:

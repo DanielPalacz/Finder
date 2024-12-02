@@ -11,3 +11,4 @@ with open("JOB_ROLES_DEFINITIONS.txt", "r") as job_defs:
 
 
 JOB_ROLES = job_definitions or ["python"]
+""""Job roles to be searched by Finder solution."""
