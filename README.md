@@ -4,6 +4,7 @@
 #### But, first of all I looked for optimal solution from performance point of view. What did I find?
  - [Which multitasking solution?](https://github.com/DanielPalacz/Finder/blob/master/NOTES/README__WHICH_MULTITASKING_SOLUTIONS.md)
  - [What about dynamic JS-based content impact?](https://github.com/DanielPalacz/Finder/blob/master/NOTES/README__DYNAMIC_JS_IMPACT.md)
+ - [SOLID thoughts?](https://github.com/DanielPalacz/Finder/blob/master/NOTES/README__SOLID_THOUGHTS.md)
 
 
 #### So, then what next?
@@ -18,7 +19,7 @@
 | unit-testing (pytest)                                                            | [DONE]        |
 | dockerize solution                                                               | [NOT STARTED] |
 | adding lock for saving results to file                                           | [DONE]        |
-| refactoring to follow SOLID rules                                                | [IN PROGRESS] |
+| refactoring to follow SOLID rules                                                | [DONE]        |
 
 
 

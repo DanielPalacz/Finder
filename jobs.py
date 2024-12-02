@@ -29,10 +29,10 @@ class UrlFetcher:
         logger (LoggerT): logger object
     """
 
-    def __init__(self, logger):
+    def __init__(self, logger: LoggerT):
         self.logger = logger
 
-    def fetch(self, url) -> Optional[str]:
+    def fetch(self, url: str) -> Optional[str]:
         """Fetches link (http request execution).
 
         Args:
@@ -58,16 +58,15 @@ class UrlFetcher:
         except requests.exceptions.SSLError:
             if url.startswith("https://"):
                 url = url.replace("https://", "http://")
-
             try:
-                response_http = requests.get(url, allow_redirects=True, timeout=5)
-                if response_http.ok:
-                    self.logger.debug(f"Successfully fetched the given url: {url} [(backup http flow]")
-                    return response_http.text
+                response_backup = requests.get(url, allow_redirects=True, timeout=5)
+                if response_backup.ok:
+                    self.logger.debug(f"Successfully fetched the given url: {url} [backup http flow].")
+                    return response_backup.text
                 else:
                     self.logger.error(
                         f"Returning None, because something went wrong with request execution ({url}). "
-                        f"Returned status code: {response_http.status_code} [backup http flow]"
+                        f"Returned status code: {response_backup.status_code} [backup http flow]."
                     )
                     return None
 
