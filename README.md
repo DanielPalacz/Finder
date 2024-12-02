@@ -17,6 +17,8 @@
 | robots.txt add to solution relying on website's robots.txt rules                 | [NOT STARTED] |
 | unit-testing (pytest)                                                            | [DONE]        |
 | dockerize solution                                                               | [NOT STARTED] |
+| adding lock for saving results to file                                           | [DONE]        |
+| refactoring to follow SOLID rules                                                | [NOT STARTED] |
 
 
 
