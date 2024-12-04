@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 import multiprocessing
+import os
+import signal
+import threading
 from typing import Optional
 from urllib.parse import urljoin
 
@@ -399,5 +402,18 @@ class JobScanner:
 
 
 if __name__ == "__main__":
+    from flask_api import app
+    # Create a flask api separate thread
+    flask_thread_object = threading.Thread(target=app.run, kwargs={"debug": False, "use_reloader": False, "host": '0.0.0.0', "port": 7777}, daemon=True)
+    flask_thread_object.start()
+
     scanner = JobScanner()
     scanner.run()
+
+    def signal_handler(sig, frame):
+        print("\nCTRL+C caught in signal handler!")
+        os._exit(0)  # Exit the program
+
+    # Register the signal handler for SIGINT
+    signal.signal(signal.SIGINT, signal_handler)
+    os.kill(os.getpid(), signal.SIGINT)

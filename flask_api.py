@@ -101,4 +101,6 @@ app.add_url_rule("/logs", view_func=logs, methods=("GET",))
 app.add_url_rule("/results", view_func=results, methods=("GET",))
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=True, host='0.0.0.0', port=7777)
+    pass
+    # app.run(debug=True, use_reloader=True, host='0.0.0.0', port=7777)
+    # app.run(debug=True, use_reloader=True, host='0.0.0.0', port=7777)
