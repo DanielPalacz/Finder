@@ -34,7 +34,7 @@ Copy company database (CSV) to main directory and save as 'USED_FILE_DB.csv'.
 
 # Monitoring execution:
 ```
-For that reasons, small Flas api is setup for time of 'python jobs.py' execution:
+For that reasons, small Flask api is setup for time of 'python jobs.py' execution:
  - http://127.0.0.1:7777
  - http://127.0.0.1:7777/logs
  - http://127.0.0.1:7777/results
