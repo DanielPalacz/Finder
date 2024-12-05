@@ -20,16 +20,24 @@
 | dockerize solution                                                               | [IN PROGRESS] |
 | adding lock for saving results to file                                           | [DONE]        |
 | refactoring to follow SOLID rules                                                | [DONE]        |
-| add small separate thread based Flask api for displaying results                 | [NOT STARTED] |
+| add small separate thread based Flask api for displaying results                 | [DONE]        |
 
 
 
-#### Running solution:
+# Running solution:
 ```
 Copy company database (CSV) to main directory and save as 'USED_FILE_DB.csv'.
  - create venv: python3 -m venv venv
  - pip install -r requirements.txt
  - python jobs.py
+```
+
+# Monitoring execution:
+```
+For that reasons, small Flas api is setup for time of 'python jobs.py' execution:
+ - http://127.0.0.1:7777
+ - http://127.0.0.1:7777/logs
+ - http://127.0.0.1:7777/results
 ```
 
 
@@ -49,11 +57,13 @@ Now, prepare
  - OUTPUT_JOB_SEARCH_FILEPATH - Empty file dedicated for output results should exist there
 
 Start container:
- - docker run -d --rm -v <CSV_DB_FILEPATH>:/app/USED_FILE_DB.csv -v <OUTPUT_JOB_SEARCH_FILEPATH>:/app/CRAWLED_JOBS_OUTPUT_FILE.csv my_scraper_app
+ - docker run -d --rm -v <CSV_DB_FILEPATH>:/app/USED_FILE_DB.csv -v <OUTPUT_JOB_SEARCH_FILEPATH>:/app/CRAWLED_JOBS_OUTPUT_FILE.csv -p <PORT_IN_OS>:<PORT_INSIDE_CONTAINER> my_scraper_app
 
 Now, look what happens inside container:
- - docker ps
  - docker exec -it container_name bash
- - tail -f logs/JobScanner.log
-```
 
+Simple API is also provided for that reasons:
+ - http://127.0.0.1:<PORT_IN_OS>/
+ - http://127.0.0.1:<PORT_IN_OS>/logs
+ - http://127.0.0.1:<PORT_IN_OS>/results
+```
