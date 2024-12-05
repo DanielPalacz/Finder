@@ -39,12 +39,12 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 1
 COPY requirements.txt .
 
 # Install Python dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --upgrade pip && pip install --ignore-installed -r requirements.txt
 
 # Copy the rest of the application code to the working directory
 COPY . .
 
-RUN mkdir logs
+RUN mkdir -p logs
 
 # Set an entry point for the container
 CMD ["python", "jobs.py"]
