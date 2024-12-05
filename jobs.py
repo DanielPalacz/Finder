@@ -403,8 +403,11 @@ class JobScanner:
 
 if __name__ == "__main__":
     from flask_api import app
+
     # Create a flask api separate thread
-    flask_thread_object = threading.Thread(target=app.run, kwargs={"debug": False, "use_reloader": False, "host": '0.0.0.0', "port": 7777}, daemon=True)
+    flask_thread_object = threading.Thread(
+        target=app.run, kwargs={"debug": False, "use_reloader": False, "host": "127.0.0.1", "port": 7777}, daemon=True
+    )
     flask_thread_object.start()
 
     scanner = JobScanner()
