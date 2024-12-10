@@ -353,9 +353,11 @@ class JobScanner:
         """
         running_processes = []
         lock = multiprocessing.Lock()
-
+        line_number = 0
         for company_data in iterate_over_csv_db_file():
-            line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address = company_data
+            line_number += 1
+            company_name, krs_number, www, _, _, email, address, _, _ = company_data
+            # f"{company_name};{krs_number};{www};-;-;{email};Warszawa\n")
 
             if start_line_number and start_line_number > int(line_number):
                 continue
@@ -364,7 +366,7 @@ class JobScanner:
                 continue
 
             process = multiprocessing.Process(
-                target=self.__run_www_check_for_the_needed_jobs, args=(www, company_data, lock)
+                target=self.__run_www_check_for_the_needed_jobs, args=(www, company_data, lock, line_number)
             )
 
             process.start()
@@ -377,7 +379,9 @@ class JobScanner:
                     self.logger.info(f"Finished all 12-processes-based tasks iteration [line:{line_number}].")
                     running_processes.clear()
 
-    def __run_www_check_for_the_needed_jobs(self, www, company_data: list[str], lock: multiprocessing.Lock) -> None:
+    def __run_www_check_for_the_needed_jobs(
+        self, www, company_data: list[str], lock: multiprocessing.Lock, line_number
+    ) -> None:
         """Runs www check for the needed job search.
 
         Args:
@@ -388,7 +392,8 @@ class JobScanner:
         Returns:
             None, but save job/company data directly to output file
         """
-        line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address = company_data
+        company_name, krs_number, www, _, _, email, address, _, _ = company_data
+        # line_number, company_name, krs_number, main_pkd, other_pkd, email, www, voivodeship, address = company_data
         self.logger.info(f"Processing line number: {line_number}, {company_name}")
 
         career_links = list(set(self.__career_links_fetcher.get_career_links(www)))

@@ -1,1 +1,1 @@
-python
+junior python
