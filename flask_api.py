@@ -1,10 +1,18 @@
+from __future__ import annotations
+
+import functools
+import os
+import signal
+import threading
 from os.path import dirname
 
 from flask import Flask
 
 from config import CRAWLED_JOBS_OUTPUT_FILE
+from config import JOB_ROLES
 
 app = Flask(__name__)
+
 
 def home():
     return """
@@ -19,6 +27,7 @@ def home():
             <ul>
                 <li><a href="/logs">/logs</a> - displaying latest logs</li>
                 <li><a href="/results">/results</a> - displaying all results collected till now</li>
+                <li><a href="/jobs_definition">/jobs_definition</a> - displaying job keywords used for Job Search</li>
             </ul>
         </body>
     </html>
@@ -94,11 +103,58 @@ def results():
     """
 
 
+def jobs_definition():
+    output_str = "List of job definitions keywords / rules used for job search:"
+    line_counter = 0
+    for job_def in JOB_ROLES:
+        line_counter += 1
+        output_str += f"\n - {job_def}"
+    return f"""
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Flask App</title>
+        </head>
+        <body>
+            <pre>{output_str}</pre>
+        </body>
+    </html>
+    """
 
 
 app.add_url_rule("/", view_func=home, methods=("GET",))
 app.add_url_rule("/logs", view_func=logs, methods=("GET",))
 app.add_url_rule("/results", view_func=results, methods=("GET",))
+app.add_url_rule("/jobs_definition", view_func=jobs_definition, methods=("GET",))
+
+
+def run_flask_monitoring_api(f):
+    """Decorator function running flask api during other function execution"""
+
+    @functools.wraps(f)
+    def function_wrapper(*args, **kwargs):
+        # Create a flask api separate thread
+        flask_thread_object = threading.Thread(  # nosec
+            target=app.run,  # nosec
+            kwargs={"debug": False, "use_reloader": False, "host": "0.0.0.0", "port": 7777},  # nosec
+            daemon=True,  # nosec
+        )
+        flask_thread_object.start()
+
+        results_f = f(*args, **kwargs)
+
+        def signal_handler(sig, frame):
+            print("\nCTRL+C caught in signal handler!")
+            os._exit(0)  # Exit the program
+
+        # Register the signal handler for SIGINT
+        signal.signal(signal.SIGINT, signal_handler)
+        os.kill(os.getpid(), signal.SIGINT)
+
+        return results_f
+
+    return function_wrapper
+
 
 if __name__ == "__main__":
     pass

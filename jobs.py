@@ -1,9 +1,6 @@
 from __future__ import annotations
 
 import multiprocessing
-import os
-import signal
-import threading
 from typing import Optional
 from urllib.parse import urljoin
 
@@ -12,6 +9,7 @@ from bs4 import BeautifulSoup
 
 from config import CRAWLED_JOBS_OUTPUT_FILE
 from config import JOB_ROLES
+from flask_api import run_flask_monitoring_api
 from helpers import configure_logger
 from helpers import iterate_over_csv_db_file
 from helpers import LoggerT
@@ -401,24 +399,14 @@ class JobScanner:
                 break
 
 
+@run_flask_monitoring_api
+def run_job_scanner():
+    job_scanner = JobScanner()
+    job_scanner.run()
+
+
 if __name__ == "__main__":
-    from flask_api import app
+    run_job_scanner()  # with Flask API
 
-    # Create a flask api separate thread
-    flask_thread_object = threading.Thread(  # nosec
-        target=app.run,  # nosec
-        kwargs={"debug": False, "use_reloader": False, "host": "0.0.0.0", "port": 7777},  # nosec
-        daemon=True,  # nosec
-    )
-    flask_thread_object.start()
-
-    scanner = JobScanner()
-    scanner.run()
-
-    def signal_handler(sig, frame):
-        print("\nCTRL+C caught in signal handler!")
-        os._exit(0)  # Exit the program
-
-    # Register the signal handler for SIGINT
-    signal.signal(signal.SIGINT, signal_handler)
-    os.kill(os.getpid(), signal.SIGINT)
+    # or:
+    # JobScanner().run() # without Flask API
