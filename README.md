@@ -13,11 +13,11 @@
 |----------------------------------------------------------------------------------|---------------|
 | Which multitasking solution?                                                     | [DONE]        |
 | playing with PostgreSQL                                                          | [NOT STARTED] |
-| checking impact of career links filtering                                        | [PAUSED]      |
+| checking impact of career links filtering                                        | [DONE]      |
 | limiting impact of dynamic JS content by using requests-html and evaulating cost | [DONE]        |
 | robots.txt add to solution relying on website's robots.txt rules                 | [NOT STARTED] |
 | unit-testing (pytest)                                                            | [DONE]        |
-| dockerize solution                                                               | [IN PROGRESS] |
+| dockerize solution                                                               | [DONE] |
 | adding lock for saving results to file                                           | [DONE]        |
 | refactoring to follow SOLID rules                                                | [DONE]        |
 | add small separate thread based Flask api for displaying results                 | [DONE]        |
