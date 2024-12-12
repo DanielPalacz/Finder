@@ -38,6 +38,9 @@ For that reasons, small Flask api is setup for time of 'python jobs.py' executio
  - http://127.0.0.1:7777
  - http://127.0.0.1:7777/logs
  - http://127.0.0.1:7777/results
+
+Or if 'python jobs.py' execution ended then small Flask api can be run this way:
+ - python flask_api.py
 ```
 
 

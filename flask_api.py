@@ -157,6 +157,5 @@ def run_flask_monitoring_api(f):
 
 
 if __name__ == "__main__":
-    pass
-    # app.run(debug=True, use_reloader=True, host='0.0.0.0', port=7777)
+    app.run(debug=True, use_reloader=True, host="0.0.0.0", port=7777)  # nosec
     # app.run(debug=True, use_reloader=True, host='0.0.0.0', port=7777)
