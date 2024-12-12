@@ -9,6 +9,7 @@ from http.server import HTTPServer
 from os.path import abspath
 from os.path import dirname
 from pathlib import Path
+from time import sleep
 
 import pytest
 
@@ -128,3 +129,30 @@ def setup_www_page(mock_company_html):
     yield
 
     stop_server(server)
+
+
+@pytest.fixture(scope="session")
+def setup_flask_api():
+    """Setups flask api fixture"""
+
+    from flask_api import app
+
+    flask_thread_object = threading.Thread(  # nosec
+        target=app.run,  # nosec
+        kwargs={"debug": False, "use_reloader": False, "host": "0.0.0.0", "port": 7777},  # nosec
+        daemon=True,  # nosec
+    )
+    flask_thread_object.start()
+    sleep(1)
+
+    yield "http://127.0.0.1:7777/"
+
+    def signal_handler(sig, frame):
+        print("\nCTRL+C caught in signal handler!")
+        os._exit(0)  # Exit the program
+
+    # Register the signal handler for SIGINT
+    # signal.signal(signal.SIGINT, signal_handler)
+    # os.kill(os.getpid(), signal.SIGINT)
+
+    flask_thread_object.join(timeout=1)
