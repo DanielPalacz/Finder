@@ -375,7 +375,9 @@ class JobScanner:
                     self.logger.info(f"Finished all 12-processes-based tasks iteration [line:{line_number}].")
                     running_processes.clear()
 
-    def __run_www_check_for_the_needed_jobs(self, www, company_data: list[str], lock: multiprocessing.Lock) -> None:
+    def __run_www_check_for_the_needed_jobs(
+        self, www, company_data: list[str], lock: multiprocessing.synchronize.Lock
+    ) -> None:
         """Runs www check for the needed job search.
 
         Args:
