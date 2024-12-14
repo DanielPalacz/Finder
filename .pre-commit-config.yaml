@@ -41,7 +41,7 @@ repos:
 -   repo: local
     hooks:
     -   id: mypy
-        name: Run mypy
+        name: mypy (local)
         entry: mypy
         language: system
         types: [python]
