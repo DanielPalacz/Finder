@@ -2,9 +2,9 @@
 #### The goal for that repo-project is to really help me with finding pythons projects / jobs.
 
 #### But, first of all I looked for optimal solution from performance point of view. What did I find?
- - [Which multitasking solution?](https://github.com/DanielPalacz/Finder/blob/master/NOTES/README__WHICH_MULTITASKING_SOLUTIONS.md)
- - [What about dynamic JS-based content impact?](https://github.com/DanielPalacz/Finder/blob/master/NOTES/README__DYNAMIC_JS_IMPACT.md)
- - [SOLID thoughts?](https://github.com/DanielPalacz/Finder/blob/master/NOTES/README__SOLID_THOUGHTS.md)
+ - [Which multitasking solution?](https://github.com/DanielPalacz/Finder/blob/master/_notes/README__WHICH_MULTITASKING_SOLUTIONS.md)
+ - [What about dynamic JS-based content impact?](https://github.com/DanielPalacz/Finder/blob/master/_notes/README__DYNAMIC_JS_IMPACT.md)
+ - [SOLID thoughts?](https://github.com/DanielPalacz/Finder/blob/master/_notes/README__SOLID_THOUGHTS.md)
 
 
 #### So, then what next?
