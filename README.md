@@ -20,9 +20,10 @@
 | dockerize solution                                               | [DONE]        |
 | adding lock for saving results to file                           | [DONE]        |
 | refactoring to follow SOLID rules                                | [DONE]        |
-| small separate thread based Flask api for displaying results     | [DONE]        |
+| small separate thread based Flask api for monitoring execution   | [DONE]        |
 | mypy setup, fixing several 'mypy-related' typing issues          | [DONE]        |
 | integrating coverage package for test coverage metrics           | [DONE]        |
+| creating GitHub Actions CI pipeline for automation tests         | [DONE]        |
 
 
 
