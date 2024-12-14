@@ -9,19 +9,20 @@
 
 #### So, then what next?
 
-| Item                                                                             | Status        |
-|----------------------------------------------------------------------------------|---------------|
-| Which multitasking solution?                                                     | [DONE]        |
-| playing with PostgreSQL                                                          | [NOT STARTED] |
-| checking impact of career links filtering                                        | [DONE]      |
-| limiting impact of dynamic JS content by using requests-html and evaulating cost | [DONE]        |
-| robots.txt add to solution relying on website's robots.txt rules                 | [NOT STARTED] |
-| unit-testing (pytest)                                                            | [DONE]        |
-| dockerize solution                                                               | [DONE] |
-| adding lock for saving results to file                                           | [DONE]        |
-| refactoring to follow SOLID rules                                                | [DONE]        |
-| small separate thread based Flask api for displaying results                     | [DONE]        |
-| mypy setup, fixing several 'mypy-related' typing issues                          | [DONE]        |
+| Item                                                             | Status        |
+|------------------------------------------------------------------|---------------|
+| Which multitasking solution?                                     | [DONE]        |
+| playing with PostgreSQL                                          | [NOT STARTED] |
+| checking impact of career links filtering                        | [DONE]        |
+| limiting JS-impact  (by using requests-html and judging cost)    | [DONE]        |
+| robots.txt add to solution relying on website's robots.txt rules | [NOT STARTED] |
+| unit-testing (pytest)                                            | [DONE]        |
+| dockerize solution                                               | [DONE]        |
+| adding lock for saving results to file                           | [DONE]        |
+| refactoring to follow SOLID rules                                | [DONE]        |
+| small separate thread based Flask api for displaying results     | [DONE]        |
+| mypy setup, fixing several 'mypy-related' typing issues          | [DONE]        |
+| integrating coverage package for test coverage metrics           | [DONE]        |
 
 
 
@@ -49,7 +50,8 @@ Or if 'python jobs.py' execution ended then small Flask api can be run this way:
 ```
  - PYTHONPATH=. pytest -vv tests/
  - PYTHONPATH=. pytest -s -vv tests/
- - PYTHONPATH=. pytest -s -vv --html=report.html --self-contained-html
+ - PYTHONPATH=. pytest -vv --html=TestExecutionReport.html --self-contained-html
+ - PYTHONPATH=. pytest -vv --cov-report=html:TestCoverageReport tests/
 ```
 
 #### Dockerizing solution:
