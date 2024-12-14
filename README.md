@@ -20,7 +20,8 @@
 | dockerize solution                                                               | [DONE] |
 | adding lock for saving results to file                                           | [DONE]        |
 | refactoring to follow SOLID rules                                                | [DONE]        |
-| add small separate thread based Flask api for displaying results                 | [DONE]        |
+| small separate thread based Flask api for displaying results                     | [DONE]        |
+| mypy setup, fixing several 'mypy-related' typing issues                          | [DONE]        |
 
 
 
@@ -46,6 +47,7 @@ Or if 'python jobs.py' execution ended then small Flask api can be run this way:
 
 #### Running tests:
 ```
+ - PYTHONPATH=. pytest -vv tests/
  - PYTHONPATH=. pytest -s -vv tests/
  - PYTHONPATH=. pytest -s -vv --html=report.html --self-contained-html
 ```

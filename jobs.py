@@ -7,8 +7,8 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 
-from config import CRAWLED_JOBS_OUTPUT_FILE
-from config import JOB_ROLES
+from configuration.config import CRAWLED_JOBS_OUTPUT_FILE
+from configuration.config import JOB_ROLES
 from flask_api import run_flask_monitoring_api
 from helpers import configure_logger
 from helpers import iterate_over_csv_db_file
@@ -30,7 +30,7 @@ class UrlFetcher:
         logger (LoggerT): logger object
     """
 
-    def __init__(self, logger: LoggerT):
+    def __init__(self, logger: LoggerT) -> None:
         self.logger = logger
 
     def fetch(self, url: str) -> Optional[str]:
@@ -104,7 +104,7 @@ class LinksExtractor:
         logger (LoggerT): logger object
     """
 
-    def __init__(self, logger):
+    def __init__(self, logger: LoggerT) -> None:
         self.logger = logger
 
     def extract_links(self, baseurl: str, website_html_text: str) -> list[str]:
@@ -210,10 +210,10 @@ class CareerLinksFetcher(LinksExtractor):
         "kariera-it",
     ]
 
-    def __init__(self, logger):
+    def __init__(self, logger: LoggerT) -> None:
         super().__init__(logger)
 
-    def get_career_links(self, baseurl: str) -> list:
+    def get_career_links(self, baseurl: str) -> list[str]:
         """Filters for potential career related links from list of the links.
 
         Args:
@@ -256,10 +256,10 @@ class JobsChecker:
         logger (LoggerT): logger object
     """
 
-    def __init__(self, logger: LoggerT):
+    def __init__(self, logger: LoggerT) -> None:
         self.logger = logger
 
-    def may_company_have_the_needed_jobs(self, url) -> bool:
+    def may_company_have_the_needed_jobs(self, url: str) -> bool:
         """Checks if the given link www may contain jobs that are searched.
 
         Args:
@@ -299,7 +299,7 @@ class JobsFileSaver:
         logger (LoggerT): logger object
     """
 
-    def __init__(self, logger: LoggerT):
+    def __init__(self, logger: LoggerT) -> None:
         self.logger = logger
         self.__filepath = CRAWLED_JOBS_OUTPUT_FILE
 
@@ -334,7 +334,7 @@ class JobScanner:
         __jobs_file_saver (JobsFileSaver): jobs file saver object
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = configure_logger("JobScanner")
         self.__career_links_fetcher = CareerLinksFetcher(self.logger)
         self.__jobs_checker = JobsChecker(self.logger)
@@ -376,7 +376,7 @@ class JobScanner:
                     running_processes.clear()
 
     def __run_www_check_for_the_needed_jobs(
-        self, www, company_data: list[str], lock: multiprocessing.synchronize.Lock
+        self, www: str, company_data: list[str], lock: multiprocessing.synchronize.Lock
     ) -> None:
         """Runs www check for the needed job search.
 
@@ -402,8 +402,8 @@ class JobScanner:
 
 
 @run_flask_monitoring_api
-def run_job_scanner():
-    job_scanner = JobScanner()
+def run_job_scanner() -> None:
+    job_scanner: JobScanner = JobScanner()
     job_scanner.run()
 
 

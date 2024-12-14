@@ -3,10 +3,11 @@ from __future__ import annotations
 import logging
 from logging.handlers import RotatingFileHandler
 from os import getenv
+from typing import Generator
 from typing import Optional
 from typing import TypeAlias
 
-from config import DB_FILEPATH
+from configuration.config import DB_FILEPATH
 
 
 LoggerT: TypeAlias = logging.Logger
@@ -44,7 +45,7 @@ def configure_logger(logger_name: str) -> LoggerT:
     return logger
 
 
-def iterate_over_csv_db_file(db_filepath: Optional[str] = None):
+def iterate_over_csv_db_file(db_filepath: Optional[str] = None) -> Generator[list[str]]:
     """Iterates line-after-line over content of DB file
 
     Uses DB with default file name: DB_FILENAME

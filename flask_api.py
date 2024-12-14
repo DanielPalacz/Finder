@@ -5,16 +5,21 @@ import os
 import signal
 import threading
 from os.path import dirname
+from types import FrameType
+from typing import Any
+from typing import Callable
+from typing import Optional
 
 from flask import Flask
 
-from config import CRAWLED_JOBS_OUTPUT_FILE
-from config import JOB_ROLES
+from configuration.config import CRAWLED_JOBS_OUTPUT_FILE
+from configuration.config import JOB_ROLES
+
 
 app = Flask(__name__)
 
 
-def home():
+def home() -> str:
     return """
     <!DOCTYPE html>
     <html>
@@ -34,7 +39,7 @@ def home():
     """
 
 
-def tail(file_path, lines=10):
+def tail(file_path: str, lines: int = 10) -> list[str]:
     with open(file_path, "rb") as file:
         file.seek(0, 2)  # Go to the end of the file
         file_size = file.tell()  # Get the file size
@@ -59,7 +64,7 @@ def tail(file_path, lines=10):
         return all_lines[-lines:]
 
 
-def logs():
+def logs() -> str:
     try:
         log_filepath = dirname(__file__) + "/logs/JobScanner.log"
         tailed_lines = tail(log_filepath)
@@ -79,7 +84,7 @@ def logs():
     """
 
 
-def results():
+def results() -> str:
     try:
         output_str = ""
         line_counter = 0
@@ -103,7 +108,7 @@ def results():
     """
 
 
-def jobs_definition():
+def jobs_definition() -> str:
     output_str = "List of job definitions keywords / rules used for job search:"
     line_counter = 0
     for job_def in JOB_ROLES:
@@ -128,11 +133,11 @@ app.add_url_rule("/results", view_func=results, methods=("GET",))
 app.add_url_rule("/jobs_definition", view_func=jobs_definition, methods=("GET",))
 
 
-def run_flask_monitoring_api(f):
+def run_flask_monitoring_api(f: Callable[..., Any]) -> Callable[..., Any]:
     """Decorator function running flask api during other function execution"""
 
     @functools.wraps(f)
-    def function_wrapper(*args, **kwargs):
+    def function_wrapper(*args: Any, **kwargs: Any) -> Any:
         # Create a flask api separate thread
         flask_thread_object = threading.Thread(  # nosec
             target=app.run,  # nosec
@@ -143,7 +148,7 @@ def run_flask_monitoring_api(f):
 
         results_f = f(*args, **kwargs)
 
-        def signal_handler(sig, frame):
+        def signal_handler(sig: int, frame: Optional[FrameType]) -> None:
             print("\nCTRL+C caught in signal handler!")
             os._exit(0)  # Exit the program
 

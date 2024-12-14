@@ -38,11 +38,13 @@ repos:
     types: [python]
     pass_filenames: false
     always_run: true
--   repo: local
-    hooks:
-    -   id: mypy
-        name: mypy (local)
-        entry: mypy
-        language: system
-        types: [python]
-        args: ["--config-file=mypy.ini"]  # mypy configuration file
+- repo: local
+  hooks:
+    - id: mypy
+      name: mypy (local)
+      entry: mypy
+      language: system
+      types: [python]
+      args: ["--config-file=mypy.ini", "--exclude", "tests|venv", "./"]  # mypy configuration file
+      always_run: true
+      files: ^.*\.py$ # mypy has to check all Python files (.py)
